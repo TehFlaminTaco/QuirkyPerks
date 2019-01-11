@@ -78,7 +78,7 @@ public class GUICard extends GuiContainer implements ITooltipSetter{
         }
 
         addButton(new GUIWarpButton(this, I18n.format("quirky.gui.remove_interface"),
-            1, (width + xSize) / 2 - 16 - 8, (height - ySize) / 2 + 20,
+            1, (width + xSize) / 2 - 16 - 8, (height - ySize) / 2 + 8,
             TEX_MINUS
         ));
 
@@ -92,7 +92,7 @@ public class GUICard extends GuiContainer implements ITooltipSetter{
         EnumWarpInterface[] itfs = EnumWarpInterface.values();
         for(int i = 0; i < itfs.length; i++){
             GuiButton b = addButton(new GUIWarpButton(this, itfs[i].name(),
-                2 + interfaces.size() + i, (width - xSize) / 2 + 8, (height - ySize) / 2 + 48 + i * 18, itfs[i].icon
+                2 + interfaces.size() + i, (width + xSize) / 2 - 16 - 8, (height - ySize) / 2 + 38 + i * 18, itfs[i].icon
             ));
             if(itfs[i] == curInt.type)
                 b.enabled = false;
@@ -103,23 +103,23 @@ public class GUICard extends GuiContainer implements ITooltipSetter{
 
             if(curInt.inSides[i])
                 addButton(new GUIWarpButton(this, "IN: "+fs[i].name(),
-                    2 + interfaces.size() + itfs.length + i, (width - xSize) / 2 + 44 + (18 * i), (height - ySize) / 2 + 48,
+                    2 + interfaces.size() + itfs.length + i, (width - xSize) / 2 + 26 + (18 * i), (height - ySize) / 2 + 48,
                     TEX_SELECTED, TEX_DIRECTION.get(fs[i])
                 ));
             else
                 addButton(new GUIWarpButton(this, "IN: "+fs[i].name(),
-                    2 + interfaces.size() + itfs.length + i, (width - xSize) / 2 + 44 + (18 * i), (height - ySize) / 2 + 48,
+                    2 + interfaces.size() + itfs.length + i, (width - xSize) / 2 + 26 + (18 * i), (height - ySize) / 2 + 48,
                     TEX_DIRECTION.get(fs[i])
                 ));
 
             if(curInt.outSides[i])
                 addButton(new GUIWarpButton(this, "OUT: "+fs[i].name(),
-                    2 + interfaces.size() + itfs.length + fs.length + i, (width - xSize) / 2 + 44 + (18 * i), (height - ySize) / 2 + 66,
+                    2 + interfaces.size() + itfs.length + fs.length + i, (width - xSize) / 2 + 26 + (18 * i), (height - ySize) / 2 + 66,
                     TEX_SELECTED, TEX_DIRECTION.get(fs[i])
                 ));
             else
                 addButton(new GUIWarpButton(this, "OUT: "+fs[i].name(),
-                    2 + interfaces.size() + itfs.length + fs.length + i, (width - xSize) / 2 + 44 + (18 * i), (height - ySize) / 2 + 66,
+                    2 + interfaces.size() + itfs.length + fs.length + i, (width - xSize) / 2 + 26 + (18 * i), (height - ySize) / 2 + 66,
                     TEX_DIRECTION.get(fs[i])
                 ));
         }
@@ -223,9 +223,9 @@ public class GUICard extends GuiContainer implements ITooltipSetter{
             GlStateManager.scale(1f/16f, 1f/16f, 1f/16f);
 
             mc.getTextureManager().bindTexture(TEX_IN);
-            drawTexturedModalRect(16 * 26, 16 * 48, 0, 0, 256, 256);
+            drawTexturedModalRect(16 * 8, 16 * 48, 0, 0, 256, 256);
             mc.getTextureManager().bindTexture(TEX_OUT);
-            drawTexturedModalRect(16 * 26, 16 * 66, 0, 0, 256, 256);
+            drawTexturedModalRect(16 * 8, 16 * 66, 0, 0, 256, 256);
 
             GlStateManager.scale(16f, 16f, 16f);
         }

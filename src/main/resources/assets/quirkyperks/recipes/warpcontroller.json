@@ -15,7 +15,7 @@
         "b":
         {
             "type": "forge:ore_dict",
-            "ore": "ingotEnder"
+            "ore": "ingotEnderSteel"
         },
         "c":
         {

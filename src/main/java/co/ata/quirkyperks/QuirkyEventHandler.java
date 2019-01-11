@@ -25,7 +25,7 @@ public class QuirkyEventHandler{
     static List<Item> genericItems = new ArrayList<Item>();
  
     public QuirkyEventHandler(){
-        genericItems.add(new ItemGeneric("infusedsteel", "ingotEnder"));
+        genericItems.add(new ItemGeneric("infusedsteel", "ingotEnderSteel"));
         genericItems.add(new ItemGeneric("enderdust", "dustEnder"));
     }
 

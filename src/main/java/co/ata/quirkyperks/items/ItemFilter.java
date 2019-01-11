@@ -13,6 +13,9 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandlerItem;
+import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class ItemFilter extends Item {
@@ -89,7 +92,55 @@ public class ItemFilter extends Item {
     }
 
     public static boolean CanAccept(ItemStack filter, FluidStack target){
-        return true;
+        if(filter.isEmpty())
+            return true;
+        if(filter.getItem() != ItemFilter.INSTANCE)
+            return true;
+        if(!filter.hasTagCompound())
+            return true;
+        if(!filter.getTagCompound().hasKey("filters"))
+            return true;
+        if(!filter.getTagCompound().hasKey("filter_options"))
+            return true;
+        
+
+        NBTTagCompound filter_options = filter.getSubCompound("filter_options");
+        boolean whitelist = filter_options.getBoolean("whitelist");
+        boolean nbt = filter_options.getBoolean("nbt");
+        boolean air = filter_options.getBoolean("air");
+
+        boolean foundItem = false;
+        filterItems.clear();
+        ItemStackHelper.loadAllItems(filter.getSubCompound("filters"), filterItems);
+        if(target == null){
+            return air;
+        }
+
+        for(ItemStack i : filterItems){
+            if(i.isEmpty()) // Ignore empty filters.
+                continue;
+            if(!i.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null))
+                continue;
+            IFluidHandlerItem handl = i.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
+            IFluidTankProperties[] props = handl.getTankProperties();
+            if(props.length == 0)
+                continue;
+            FluidStack fI = props[0].getContents();
+
+            if(fI == null)
+                continue;
+
+            boolean types_match = fI.getFluid() == target.getFluid();
+
+            if(!types_match)
+                continue;
+            if(!nbt && FluidStack.areFluidStackTagsEqual(target, fI))
+            foundItem = true;
+            break;
+        }
+
+        // Truthy if we found the item and using a whitelist, Falsy if we found the item and using a blacklist, And visaversa.
+        return foundItem ^! whitelist;
     }
 
     @Override

@@ -2,25 +2,16 @@
     "type": "minecraft:crafting_shaped",
     "pattern":
     [
-        "bcb",
-        "dad",
-        "bcb"
+        "bdb",
+        "d d",
+        "bdb"
     ],
     "key":
     {
-        "a":
-        {
-            "item": "quirkyperks:warper"
-        },
         "b":
         {
             "type": "forge:ore_dict",
             "ore": "ingotEnder"
-        },
-        "c":
-        {
-            "type": "forge:ore_dict",
-            "ore": "ingotGold"
         },
         "d":
         {
@@ -30,7 +21,7 @@
     },
     "result":
     {
-        "item": "quirkyperks:warpcontroller",
+        "item": "quirkyperks:warper",
         "data": 0,
         "count": 1
     }

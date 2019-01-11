@@ -1,8 +1,12 @@
 package co.ata.quirkyperks;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import co.ata.quirkyperks.blocks.BlockWarpController;
 import co.ata.quirkyperks.blocks.BlockWarper;
 import co.ata.quirkyperks.items.ItemFilter;
+import co.ata.quirkyperks.items.ItemGeneric;
 import co.ata.quirkyperks.items.ItemWarpCard;
 import co.ata.quirkyperks.tiles.TileWarpController;
 import co.ata.quirkyperks.tiles.TileWarper;
@@ -18,8 +22,11 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 
 @Mod.EventBusSubscriber(modid=QuirkyPerks.MODID)
 public class QuirkyEventHandler{
+    static List<Item> genericItems = new ArrayList<Item>();
+ 
     public QuirkyEventHandler(){
-        
+        genericItems.add(new ItemGeneric("infusedsteel", "ingotEnder"));
+        genericItems.add(new ItemGeneric("enderdust", "dustEnder"));
     }
 
     @SubscribeEvent
@@ -44,12 +51,18 @@ public class QuirkyEventHandler{
             BlockWarpController.ITEM,
             BlockWarper.ITEM
         );
+        for(Item i : genericItems){
+            event.getRegistry().register(i);
+        }
     }
 
     @SubscribeEvent
 	public static void registerRenders(ModelRegistryEvent event) {
 		registerRender(BlockWarpController.ITEM);
-		registerRender(BlockWarper.ITEM);
+        registerRender(BlockWarper.ITEM);
+        for(Item i : genericItems){
+            registerRender(i);
+        }
         registerRender(ItemWarpCard.INSTANCE);
         registerRender(ItemFilter.INSTANCE);
 	}

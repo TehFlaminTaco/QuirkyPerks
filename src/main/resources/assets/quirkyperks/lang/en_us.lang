@@ -1,8 +1,13 @@
 tile.warpcontroller.name=Warp Controller
 tile.warper.name=Warper
+
 item.warpcard.name=Warp Card
 item.filter.name=Filter
+item.infusedsteel.name=Ender Infused Steel
+item.enderdust.name=Ender Dust
+
 itemGroup.tabQuirkyPerks=Quirky Perks
+
 quirky.gui.add_interface=Add New Interface
 quirky.gui.remove_interface=Remove Current Interface
 quirky.gui.reset_slots=Reset Filtered Items

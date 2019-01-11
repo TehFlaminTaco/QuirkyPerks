@@ -1,0 +1,25 @@
+{
+    "type": "minecraft:crafting_shapeless",
+    "ingredients":
+    [
+        {
+            "type": "forge:ore_dict",
+            "ore": "dustEnder"
+        },
+        {
+            "type": "forge:ore_dict",
+            "ore": "ingotIron"
+        },
+        {
+            "item": "minecraft:coal",
+            "data": 32767
+        }
+            
+    ],
+    "result":
+    {
+        "item": "quirkyperks:infusedsteel",
+        "data": 0,
+        "count": 1
+    }
+}

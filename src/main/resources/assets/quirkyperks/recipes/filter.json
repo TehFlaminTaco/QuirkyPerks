@@ -1,0 +1,21 @@
+{
+    "type": "minecraft:crafting_shapeless",
+    "ingredients":
+    [
+        {
+            "type": "forge:ore_dict",
+            "ore": "ingotEnder"
+        },
+        {
+            "type": "forge:ore_dict",
+            "ore": "ingotGold"
+        }
+            
+    ],
+    "result":
+    {
+        "item": "quirkyperks:filter",
+        "data": 0,
+        "count": 1
+    }
+}

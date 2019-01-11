@@ -1,0 +1,116 @@
+---- Minecraft Crash Report ----
+// Daisy, daisy...
+
+Time: 1/7/19 3:11 AM
+Description: Unexpected error
+
+java.lang.NullPointerException: Unexpected error
+	at co.ata.quirkyperks.blocks.BlockWarper.onBlockActivated(BlockWarper.java:62)
+	at net.minecraft.client.multiplayer.PlayerControllerMP.processRightClickBlock(PlayerControllerMP.java:455)
+	at net.minecraft.client.Minecraft.rightClickMouse(Minecraft.java:1694)
+	at net.minecraft.client.Minecraft.processKeyBinds(Minecraft.java:2381)
+	at net.minecraft.client.Minecraft.runTickKeyboard(Minecraft.java:2147)
+	at net.minecraft.client.Minecraft.runTick(Minecraft.java:1935)
+	at net.minecraft.client.Minecraft.runGameLoop(Minecraft.java:1188)
+	at net.minecraft.client.Minecraft.run(Minecraft.java:442)
+	at net.minecraft.client.main.Main.main(Main.java:118)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at net.minecraft.launchwrapper.Launch.launch(Launch.java:135)
+	at net.minecraft.launchwrapper.Launch.main(Launch.java:28)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at net.minecraftforge.gradle.GradleStartCommon.launch(GradleStartCommon.java:97)
+	at GradleStart.main(GradleStart.java:25)
+
+
+A detailed walkthrough of the error, its code path and all known details is as follows:
+---------------------------------------------------------------------------------------
+
+-- Head --
+Thread: Client thread
+Stacktrace:
+	at co.ata.quirkyperks.blocks.BlockWarper.onBlockActivated(BlockWarper.java:62)
+	at net.minecraft.client.multiplayer.PlayerControllerMP.processRightClickBlock(PlayerControllerMP.java:455)
+	at net.minecraft.client.Minecraft.rightClickMouse(Minecraft.java:1694)
+	at net.minecraft.client.Minecraft.processKeyBinds(Minecraft.java:2381)
+	at net.minecraft.client.Minecraft.runTickKeyboard(Minecraft.java:2147)
+
+-- Affected level --
+Details:
+	Level name: MpServer
+	All players: 1 total; [EntityPlayerSP['Player358'/182, l='MpServer', x=1.89, y=68.00, z=-30.08]]
+	Chunk stats: MultiplayerChunkCache: 621, 621
+	Level seed: 0
+	Level generator: ID 00 - default, ver 1. Features enabled: false
+	Level generator options: 
+	Level spawn location: World: (40,64,-6), Chunk: (at 8,4,10 in 2,-1; contains blocks 32,0,-16 to 47,255,-1), Region: (0,-1; contains chunks 0,-32 to 31,-1, blocks 0,0,-512 to 511,255,-1)
+	Level time: 40618 game time, 4717 day time
+	Level dimension: 0
+	Level storage version: 0x00000 - Unknown?
+	Level weather: Rain time: 0 (now: false), thunder time: 0 (now: false)
+	Level game mode: Game mode: creative (ID 1). Hardcore: false. Cheats: false
+	Forced entities: 39 total; [EntityPlayerSP['Player358'/182, l='MpServer', x=1.89, y=68.00, z=-30.08], EntityRabbit['Rabbit'/66, l='MpServer', x=-2.27, y=75.00, z=-106.14], EntityBat['Bat'/67, l='MpServer', x=-5.25, y=47.10, z=-35.25], EntityBat['Bat'/68, l='MpServer', x=-6.72, y=47.10, z=-35.38], EntityBat['Bat'/69, l='MpServer', x=-8.25, y=47.10, z=-30.41], EntityBat['Bat'/70, l='MpServer', x=-10.25, y=47.10, z=-23.25], EntityBat['Bat'/71, l='MpServer', x=-12.75, y=47.10, z=-18.89], EntityBat['Bat'/72, l='MpServer', x=-12.69, y=47.10, z=-18.49], EntityBat['Bat'/73, l='MpServer', x=-10.25, y=46.10, z=-22.25], EntityBat['Bat'/75, l='MpServer', x=-5.56, y=48.10, z=-9.33], EntityBat['Bat'/76, l='MpServer', x=-4.44, y=14.10, z=9.25], EntityBat['Bat'/85, l='MpServer', x=5.25, y=23.10, z=-33.39], EntityBat['Bat'/86, l='MpServer', x=1.35, y=21.10, z=-31.00], EntityBat['Bat'/87, l='MpServer', x=2.24, y=51.10, z=-30.49], EntityBat['Bat'/88, l='MpServer', x=15.17, y=52.10, z=-23.69], EntityBat['Bat'/89, l='MpServer', x=8.38, y=51.10, z=-29.75], EntityBat['Bat'/93, l='MpServer', x=31.45, y=35.10, z=-77.25], EntitySheep['Sheep'/94, l='MpServer', x=14.70, y=67.00, z=-15.51], EntitySheep['Sheep'/96, l='MpServer', x=35.29, y=67.00, z=3.20], EntitySheep['Sheep'/97, l='MpServer', x=54.44, y=67.00, z=20.53], EntitySheep['Sheep'/102, l='MpServer', x=65.26, y=65.00, z=-7.52], EntitySheep['Sheep'/103, l='MpServer', x=60.79, y=66.00, z=-9.51], EntityRabbit['Rabbit'/104, l='MpServer', x=57.63, y=67.00, z=33.27], EntitySheep['Sheep'/105, l='MpServer', x=54.35, y=68.00, z=33.80], EntitySheep['Sheep'/107, l='MpServer', x=79.48, y=66.00, z=18.23], EntitySheep['Sheep'/108, l='MpServer', x=75.08, y=68.00, z=35.31], EntitySheep['Sheep'/46, l='MpServer', x=-40.80, y=69.00, z=-49.77], EntityRabbit['Rabbit'/47, l='MpServer', x=-33.87, y=70.00, z=-45.71], EntitySheep['Sheep'/51, l='MpServer', x=-31.27, y=71.00, z=-59.51], EntitySheep['Sheep'/52, l='MpServer', x=-26.80, y=70.00, z=-49.62], EntitySheep['Sheep'/53, l='MpServer', x=-28.45, y=69.00, z=-47.90], EntityBat['Bat'/54, l='MpServer', x=-17.75, y=46.10, z=-26.25], EntityBat['Bat'/55, l='MpServer', x=-20.75, y=49.10, z=-20.34], EntitySquid['Squid'/56, l='MpServer', x=-20.36, y=60.61, z=7.39], EntitySquid['Squid'/57, l='MpServer', x=-19.11, y=51.97, z=20.15], EntitySquid['Squid'/58, l='MpServer', x=-16.59, y=58.52, z=14.46], EntitySquid['Squid'/59, l='MpServer', x=-13.86, y=55.58, z=30.11], EntitySquid['Squid'/60, l='MpServer', x=-22.42, y=54.29, z=24.62], EntitySquid['Squid'/61, l='MpServer', x=-11.84, y=61.84, z=19.97]]
+	Retry entities: 0 total; []
+	Server brand: fml,forge
+	Server type: Integrated singleplayer server
+Stacktrace:
+	at net.minecraft.client.multiplayer.WorldClient.addWorldInfoToCrashReport(WorldClient.java:461)
+	at net.minecraft.client.Minecraft.addGraphicsAndWorldToCrashReport(Minecraft.java:2889)
+	at net.minecraft.client.Minecraft.run(Minecraft.java:471)
+	at net.minecraft.client.main.Main.main(Main.java:118)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at net.minecraft.launchwrapper.Launch.launch(Launch.java:135)
+	at net.minecraft.launchwrapper.Launch.main(Launch.java:28)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at net.minecraftforge.gradle.GradleStartCommon.launch(GradleStartCommon.java:97)
+	at GradleStart.main(GradleStart.java:25)
+
+-- System Details --
+Details:
+	Minecraft Version: 1.12.2
+	Operating System: Windows 10 (amd64) version 10.0
+	Java Version: 1.8.0_191, Oracle Corporation
+	Java VM Version: Java HotSpot(TM) 64-Bit Server VM (mixed mode), Oracle Corporation
+	Memory: 589436440 bytes (562 MB) / 921174016 bytes (878 MB) up to 1886912512 bytes (1799 MB)
+	JVM Flags: 0 total; 
+	IntCache: cache: 0, tcache: 0, allocated: 13, tallocated: 95
+	FML: MCP 9.42 Powered by Forge 14.23.5.2806 5 mods loaded, 5 mods active
+	States: 'U' = Unloaded 'L' = Loaded 'C' = Constructed 'H' = Pre-initialized 'I' = Initialized 'J' = Post-initialized 'A' = Available 'D' = Disabled 'E' = Errored
+
+	| State  | ID          | Version      | Source                           | Signature |
+	|:------ |:----------- |:------------ |:-------------------------------- |:--------- |
+	| LCHIJA | minecraft   | 1.12.2       | minecraft.jar                    | None      |
+	| LCHIJA | mcp         | 9.42         | minecraft.jar                    | None      |
+	| LCHIJA | FML         | 8.0.99.99    | forgeSrc-1.12.2-14.23.5.2806.jar | None      |
+	| LCHIJA | forge       | 14.23.5.2806 | forgeSrc-1.12.2-14.23.5.2806.jar | None      |
+	| LCHIJA | quirkyperks | 1.0          | modid-1.0.jar                    | None      |
+
+	Loaded coremods (and transformers): 
+	GL info: ' Vendor: 'ATI Technologies Inc.' Version: '4.5.13542 Compatibility Profile Context 25.20.14021.6002' Renderer: 'Radeon (TM) RX 480 Graphics'
+	Launched Version: 1.12.2
+	LWJGL: 2.9.4
+	OpenGL: Radeon (TM) RX 480 Graphics GL version 4.5.13542 Compatibility Profile Context 25.20.14021.6002, ATI Technologies Inc.
+	GL Caps: Using GL 1.3 multitexturing.
+Using GL 1.3 texture combiners.
+Using framebuffer objects because OpenGL 3.0 is supported and separate blending is supported.
+Shaders are available because OpenGL 2.1 is supported.
+VBOs are available because OpenGL 1.5 is supported.
+
+	Using VBOs: Yes
+	Is Modded: Definitely; Client brand changed to 'fml,forge'
+	Type: Client (map_client.txt)
+	Resource Packs: 
+	Current Language: English (US)
+	Profiler Position: N/A (disabled)
+	CPU: 8x AMD FX(tm)-8350 Eight-Core Processor 

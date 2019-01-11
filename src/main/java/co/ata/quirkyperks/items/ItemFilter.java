@@ -31,13 +31,6 @@ public class ItemFilter extends Item {
     private static NonNullList<ItemStack> filterItems = NonNullList.<ItemStack>withSize(17, ItemStack.EMPTY);
 
     public static boolean CanAccept(ItemStack filter, ItemStack target){
-    //    boolean did = ca(filter, target);
-    //    System.out.println(String.format("CAN FILTER: %s, %s, %s", filter, target, did));
-    //    return did;
-    //}
-
-    //private static boolean ca(ItemStack filter, ItemStack target){
-        // Ensure the Filter is 100% valid. Might be a bit wasteful.
         if(filter.isEmpty())
             return true;
         if(filter.getItem() != ItemFilter.INSTANCE)
@@ -55,16 +48,13 @@ public class ItemFilter extends Item {
         boolean meta = filter_options.getBoolean("meta");
         boolean nbt = filter_options.getBoolean("nbt");
         boolean ore = filter_options.getBoolean("ore");
+        boolean air = filter_options.getBoolean("air");
 
         boolean foundItem = false;
         filterItems.clear();
         ItemStackHelper.loadAllItems(filter.getSubCompound("filters"), filterItems);
         if(target.isEmpty()){
-            for(ItemStack i : filterItems){
-                if(i.isEmpty())
-                    return whitelist;
-            }
-            return !whitelist;
+            return air;
         }
 
         for(ItemStack i : filterItems){
@@ -81,7 +71,7 @@ public class ItemFilter extends Item {
             }
             if(!types_match)
                 continue;
-            if(!meta && i.getMetadata() != target.getMetadata())
+            if((target.getHasSubtypes() || !meta) && i.getMetadata() != target.getMetadata())
                 continue;
             NBTTagCompound tNBT = target.getTagCompound();
             NBTTagCompound iNBT = i.getTagCompound();

@@ -19,3 +19,5 @@ quirky.gui.meta.off=Strict Metadata
 quirky.gui.meta.on=Fuzzy Metadata
 quirky.gui.nbt.off=Strict NBT Data
 quirky.gui.nbt.on=Fuzzy NBT Data
+quirky.gui.air.off=Do not accept Empty
+quirky.gui.air.on=Accept Empty

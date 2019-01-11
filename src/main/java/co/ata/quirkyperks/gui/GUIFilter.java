@@ -29,6 +29,7 @@ public class GUIFilter extends GuiContainer implements ITooltipSetter{
     private static final ResourceLocation TEX_META = new ResourceLocation(QuirkyPerks.MODID, "textures/gui/meta.png");
     private static final ResourceLocation TEX_NBT = new ResourceLocation(QuirkyPerks.MODID, "textures/gui/dir_north.png");
     private static final ResourceLocation TEX_ORE = new ResourceLocation(QuirkyPerks.MODID, "textures/gui/oredict.png");
+    private static final ResourceLocation TEX_AIR = new ResourceLocation(QuirkyPerks.MODID, "textures/gui/air.png");
 
     public final ItemStack filter;
     public final ContainerFilter container;
@@ -38,6 +39,7 @@ public class GUIFilter extends GuiContainer implements ITooltipSetter{
     boolean meta = false;
     boolean nbt = false;
     boolean ore = false;
+    boolean air = true;
 
 
     @Override
@@ -102,6 +104,18 @@ public class GUIFilter extends GuiContainer implements ITooltipSetter{
                 4, (width - xSize) / 2 + 152, (height - ySize) / 2 + 55,
                 TEX_NBT
             ));
+
+        // I know this is to the far left but it was implemented late.
+        if(air)        
+            addButton(new GUIWarpButton(this, I18n.format("quirky.gui.air.on"),
+                5, (width - xSize) / 2 + 81, (height - ySize) / 2 + 55,
+                TEX_SELECTED, TEX_AIR
+            ));
+        else
+            addButton(new GUIWarpButton(this, I18n.format("quirky.gui.air.off"),
+                5, (width - xSize) / 2 + 81, (height - ySize) / 2 + 55,
+                TEX_AIR
+            ));
     }
 
     @Override
@@ -130,6 +144,10 @@ public class GUIFilter extends GuiContainer implements ITooltipSetter{
                     nbt = !nbt;
                     saveFilterOptions();
                     break;
+                case 5: // AIR TOGGLE
+                    air = !air;
+                    saveFilterOptions();
+                    break;
             }
             generateButtons();
         }
@@ -141,6 +159,7 @@ public class GUIFilter extends GuiContainer implements ITooltipSetter{
         filter_options.setBoolean("meta", meta);
         filter_options.setBoolean("ore", ore);
         filter_options.setBoolean("nbt", nbt);
+        filter_options.setBoolean("air", air);
         QuirkyPacketHandler.INSTANCE.sendToServer(new PacketUpdateFilter(filter_options));
     }
 
@@ -164,6 +183,7 @@ public class GUIFilter extends GuiContainer implements ITooltipSetter{
         if(filter_options.hasKey("meta")) meta = filter_options.getBoolean("meta"); else filter_options.setBoolean("meta", meta);
         if(filter_options.hasKey("ore")) ore = filter_options.getBoolean("ore"); else filter_options.setBoolean("ore", ore);
         if(filter_options.hasKey("nbt")) nbt = filter_options.getBoolean("nbt"); else filter_options.setBoolean("nbt", nbt);        
+        if(filter_options.hasKey("air")) air = filter_options.getBoolean("air"); else filter_options.setBoolean("air", air);        
     }
 
     @Override

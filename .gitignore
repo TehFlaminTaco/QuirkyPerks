@@ -1,5 +1,11 @@
 .gradle
 /build/
+.metadata
+.settings
+.vscode
+/bin/
+/eclipse/
+/run/
 
 # Ignore Gradle GUI config
 gradle-app.setting

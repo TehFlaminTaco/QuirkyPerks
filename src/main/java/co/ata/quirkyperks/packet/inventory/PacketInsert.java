@@ -18,7 +18,7 @@ public class PacketInsert extends PacketInventorySlot {
     public boolean simulate;
     ItemStack stack;
     EnumFacing dir;
-    public ItemStack output;
+    public ItemStack output = ItemStack.EMPTY;
 
     public PacketInsert(TileWarper source, EnumFacing facing, int index, ItemStack stack, boolean simulate){
         super(source, EnumRequestType.Insert, facing, index);

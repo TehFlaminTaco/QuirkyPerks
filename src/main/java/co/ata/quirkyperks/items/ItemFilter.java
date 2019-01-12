@@ -56,7 +56,7 @@ public class ItemFilter extends Item {
         boolean foundItem = false;
         filterItems.clear();
         ItemStackHelper.loadAllItems(filter.getSubCompound("filters"), filterItems);
-        if(target.isEmpty()){
+        if(target == null || target.isEmpty()){
             return air;
         }
 

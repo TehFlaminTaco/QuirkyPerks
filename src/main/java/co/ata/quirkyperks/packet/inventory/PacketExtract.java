@@ -18,7 +18,7 @@ public class PacketExtract extends PacketInventorySlot {
     public boolean simulate;
     int amount;
     EnumFacing dir;
-    public ItemStack output;
+    public ItemStack output = ItemStack.EMPTY;
 
     public PacketExtract(TileWarper source, EnumFacing facing, int index, int amount, boolean simulate){
         super(source, EnumRequestType.Extract, facing, index);

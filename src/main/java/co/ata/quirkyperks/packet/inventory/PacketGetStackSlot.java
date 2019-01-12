@@ -10,7 +10,7 @@ import net.minecraftforge.items.IItemHandler;
 public class PacketGetStackSlot extends PacketInventorySlot {
 
     EnumFacing dir;
-    public ItemStack output;
+    public ItemStack output = ItemStack.EMPTY;
 
     public PacketGetStackSlot(TileWarper source, EnumFacing facing, int index){
         super(source, EnumRequestType.GetStackSlot, facing, index);

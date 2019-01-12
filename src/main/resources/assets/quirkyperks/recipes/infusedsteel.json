@@ -4,7 +4,7 @@
     [
         {
             "type": "forge:ore_dict",
-            "ore": "dustEnder"
+            "ore": "nuggetEnderpearl"
         },
         {
             "type": "forge:ore_dict",

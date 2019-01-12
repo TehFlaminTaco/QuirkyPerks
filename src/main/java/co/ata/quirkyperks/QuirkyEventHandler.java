@@ -26,7 +26,7 @@ public class QuirkyEventHandler{
  
     public QuirkyEventHandler(){
         genericItems.add(new ItemGeneric("infusedsteel", "ingotEnderSteel"));
-        genericItems.add(new ItemGeneric("enderdust", "dustEnder"));
+        genericItems.add(new ItemGeneric("enderdust", "nuggetEnderpearl"));
     }
 
     @SubscribeEvent

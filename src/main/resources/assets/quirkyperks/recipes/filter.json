@@ -4,7 +4,7 @@
     [
         {
             "type": "forge:ore_dict",
-            "ore": "ingotEnder"
+            "ore": "ingotEnderSteel"
         },
         {
             "type": "forge:ore_dict",

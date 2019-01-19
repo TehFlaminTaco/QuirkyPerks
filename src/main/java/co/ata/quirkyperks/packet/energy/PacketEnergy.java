@@ -2,13 +2,11 @@ package co.ata.quirkyperks.packet.energy;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 
 import co.ata.quirkyperks.EnumInterfaceDirection;
 import co.ata.quirkyperks.EnumRequestType;
 import co.ata.quirkyperks.EnumWarpInterface;
 import co.ata.quirkyperks.WarpInterface;
-import co.ata.quirkyperks.items.ItemWarpCard;
 import co.ata.quirkyperks.packet.Packet;
 import co.ata.quirkyperks.tiles.TileWarper;
 import net.minecraft.tileentity.TileEntity;
@@ -21,17 +19,16 @@ import net.minecraftforge.energy.IEnergyStorage;
 public abstract class PacketEnergy extends Packet {
     EnumFacing facing;
     public PacketEnergy(TileWarper source, EnumRequestType type, EnumFacing facing){
-        super(source, type);
+        super(source, type, EnumWarpInterface.Energy);
         this.facing = facing;
     }
 
     @Override
-    public void touch(TileWarper target) {
-        List<WarpInterface> interfaces = ItemWarpCard.getInterfaces(target.card(), EnumWarpInterface.Energy);
+    public void touch(TileWarper target, WarpInterface iface) {
         HashSet<IEnergyStorage> handlers = new HashSet<IEnergyStorage>();
         HashMap<IEnergyStorage, EnumFacing> facings = new HashMap<IEnergyStorage, EnumFacing>();
         for(EnumFacing f : EnumFacing.values()){
-            if(!WarpInterface.canInterface(interfaces, f, EnumInterfaceDirection.Both)) // Ignore ignorable inventories.
+            if(!iface.canInterface(f, EnumInterfaceDirection.Both)) // Ignore ignorable inventories.
                 continue;
             BlockPos tPos = target.getPos().offset(f);
             TileEntity te = target.getWorld().getTileEntity(tPos);
@@ -45,9 +42,9 @@ public abstract class PacketEnergy extends Packet {
             }
         }
         for(IEnergyStorage handler : handlers){
-            touchDevice(target, handler, facings.get(handler));
+            touchDevice(target, iface, handler, facings.get(handler));
         }
     }
 
-    public abstract void touchDevice(TileWarper target, IEnergyStorage store, EnumFacing f);
+    public abstract void touchDevice(TileWarper target, WarpInterface iface, IEnergyStorage store, EnumFacing f);
 }

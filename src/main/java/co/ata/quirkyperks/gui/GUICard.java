@@ -42,6 +42,7 @@ public class GUICard extends GuiContainer implements ITooltipSetter{
 
     public final ItemStack card;
     public final ContainerCard container;
+    public GUIWarpText priorityField = null;
     InventoryPlayer playerInv;
     List<WarpInterface> interfaces = new ArrayList<WarpInterface>();
     int currentInterface = 0;
@@ -59,16 +60,21 @@ public class GUICard extends GuiContainer implements ITooltipSetter{
 
         super.initGui();
 
+        priorityField = new GUIWarpText(32, fontRenderer, 44, 84, 70, 16);
+        priorityField.setFocused(true);
         generateButtons();
+        
     }
 
     private void generateButtons() {
         buttonList.clear();
+
         if(interfaces.size() == 0){
             addButton(new GUIWarpButton(this, I18n.format("quirky.gui.add_interface"),
                 0, (width - xSize) / 2 + 8, (height - ySize) / 2 + 20,
                 TEX_PLUS
             ));
+            priorityField.setVisible(false);
             return;
         }else if(interfaces.size() < 8){
             addButton(new GUIWarpButton(this, I18n.format("quirky.gui.add_interface"),
@@ -76,6 +82,8 @@ public class GUICard extends GuiContainer implements ITooltipSetter{
                 TEX_PLUS
             ));
         }
+        priorityField.setVisible(true);
+        priorityField.setText("" + interfaces.get(currentInterface).priority);
 
         addButton(new GUIWarpButton(this, I18n.format("quirky.gui.remove_interface"),
             1, (width + xSize) / 2 - 16 - 8, (height - ySize) / 2 + 8,
@@ -148,11 +156,13 @@ public class GUICard extends GuiContainer implements ITooltipSetter{
                     }
                     QuirkyPacketHandler.INSTANCE.sendToServer(new PacketUpdateCard(tagHolder));
                     container.filterSlot = currentInterface;
+                    priorityField.setText(""+interfaces.get(currentInterface).priority);
                     generateButtons();
                 }
             }
             if(button.id >= 2 && button.id < interfaces.size() + 2){
                 currentInterface = button.id - 2;
+                priorityField.setText(""+interfaces.get(currentInterface).priority);
                 QuirkyPacketHandler.INSTANCE.sendToServer(new PacketUpdateCard(currentInterface));
                 container.filterSlot = currentInterface;
                 generateButtons();
@@ -173,6 +183,45 @@ public class GUICard extends GuiContainer implements ITooltipSetter{
             }
         }
 
+    }
+
+    protected void keyTyped(char typedChar, int keyCode) throws IOException
+    {
+        priorityField.textboxKeyTyped(typedChar, keyCode);
+        if(interfaces.size() > 0){
+            WarpInterface inf = interfaces.get(currentInterface);
+            try{
+                inf.priority = Integer.parseInt(priorityField.getText());
+            }catch(Exception e){
+                inf.priority = 0;
+            }
+        }
+        
+        if(keyCode == 1)
+            this.mc.player.closeScreen();
+
+        /*this.serverNameField.textboxKeyTyped(typedChar, keyCode);
+        this.serverIPField.textboxKeyTyped(typedChar, keyCode);
+
+        if (keyCode == 15)
+        {
+            this.serverNameField.setFocused(!this.serverNameField.isFocused());
+            this.serverIPField.setFocused(!this.serverIPField.isFocused());
+        }
+
+        if (keyCode == 28 || keyCode == 156)
+        {
+            this.actionPerformed(this.buttonList.get(0));
+        }
+
+        (this.buttonList.get(0)).enabled = !this.serverIPField.getText().isEmpty() && this.serverIPField.getText().split(":").length > 0 && !this.serverNameField.getText().isEmpty();*/
+    }
+
+    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException
+    {
+        System.out.println(String.format("%s, %s", mouseX, mouseY));
+        priorityField.mouseClicked(mouseX - ((width - xSize) / 2), mouseY - ((height - ySize) / 2), mouseButton);
+        super.mouseClicked(mouseX, mouseY, mouseButton);
     }
 
     @Override
@@ -228,6 +277,15 @@ public class GUICard extends GuiContainer implements ITooltipSetter{
             drawTexturedModalRect(16 * 8, 16 * 66, 0, 0, 256, 256);
 
             GlStateManager.scale(16f, 16f, 16f);
+
+            if(priorityField.getVisible()){
+                boolean isInt = false;
+                try{
+                    Integer.parseInt(priorityField.getText());
+                    isInt = true;
+                }catch(Exception e){};
+                priorityField.drawTextBox(isInt ? 0xE0E0E0 : 0xFF0000);
+            }
         }
 
         if(!tooltip.isEmpty())

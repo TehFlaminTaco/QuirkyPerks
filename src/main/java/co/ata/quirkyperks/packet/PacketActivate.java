@@ -1,7 +1,5 @@
 package co.ata.quirkyperks.packet;
 
-import java.util.List;
-
 import co.ata.quirkyperks.EnumInterfaceDirection;
 import co.ata.quirkyperks.EnumRequestType;
 import co.ata.quirkyperks.EnumWarpInterface;
@@ -25,7 +23,7 @@ public class PacketActivate extends Packet {
     public boolean worked = false;
 
     public PacketActivate(TileWarper source, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ){
-        super(source, EnumRequestType.Activate);
+        super(source, EnumRequestType.Activate, EnumWarpInterface.Button);
         this.playerIn = playerIn;
         this.hand = hand;
         this.facing = facing;
@@ -35,10 +33,9 @@ public class PacketActivate extends Packet {
     }
 
     @Override
-    public void touch(TileWarper target) {
-        List<WarpInterface> interfaces = ItemWarpCard.getInterfaces(target.card(), EnumWarpInterface.Button);
+    public void touch(TileWarper target, WarpInterface iface) {
         for(EnumFacing f : EnumFacing.values()){
-            if(!WarpInterface.canInterface(interfaces, ItemWarpCard.getFilters(target.card()), f, EnumInterfaceDirection.Out, playerIn.getHeldItemMainhand()))
+            if(!iface.canInterface(ItemWarpCard.getFilters(target.card()), f, EnumInterfaceDirection.Out, playerIn.getHeldItemMainhand()))
                 continue;
             BlockPos tPos = target.getPos().offset(f);
             IBlockState state = target.getWorld().getBlockState(tPos);

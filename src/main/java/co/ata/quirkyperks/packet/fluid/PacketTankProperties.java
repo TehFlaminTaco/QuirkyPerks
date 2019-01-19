@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import co.ata.quirkyperks.EnumRequestType;
+import co.ata.quirkyperks.WarpInterface;
 import co.ata.quirkyperks.packet.Packet;
 import co.ata.quirkyperks.tiles.TileWarper;
 import net.minecraft.util.EnumFacing;
@@ -21,7 +22,7 @@ public class PacketTankProperties extends PacketFluid {
 
     @SuppressWarnings("unchecked")
     @Override
-    public void touchHandler(TileWarper target, IFluidHandler handler, EnumFacing f) {
+    public void touchHandler(TileWarper target, WarpInterface iface, IFluidHandler handler, EnumFacing f) {
         props.addAll((List<IFluidTankProperties>)Arrays.asList(handler.getTankProperties()));
     }
 

@@ -1,6 +1,7 @@
 package co.ata.quirkyperks.packet.inventory;
 
 import co.ata.quirkyperks.EnumRequestType;
+import co.ata.quirkyperks.WarpInterface;
 import co.ata.quirkyperks.packet.Packet;
 import co.ata.quirkyperks.tiles.TileWarper;
 import net.minecraft.util.EnumFacing;
@@ -21,7 +22,7 @@ public class PacketSlotLimit extends PacketInventorySlot {
     }
 
     @Override
-    public void touchSlot(TileWarper target, IItemHandler handler, EnumFacing f, int slot) {
+    public void touchSlot(TileWarper target, WarpInterface iface, IItemHandler handler, EnumFacing f, int slot) {
         size = handler.getSlotLimit(slot);
 	}
 }

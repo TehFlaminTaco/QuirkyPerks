@@ -1,6 +1,7 @@
 package co.ata.quirkyperks.packet.inventory;
 
 import co.ata.quirkyperks.EnumRequestType;
+import co.ata.quirkyperks.WarpInterface;
 import co.ata.quirkyperks.packet.Packet;
 import co.ata.quirkyperks.tiles.TileWarper;
 import net.minecraft.item.ItemStack;
@@ -22,7 +23,7 @@ public class PacketGetStackSlot extends PacketInventorySlot {
     }
 
     @Override
-    public void touchSlot(TileWarper target, IItemHandler handler, EnumFacing f, int slot) {
+    public void touchSlot(TileWarper target, WarpInterface iface, IItemHandler handler, EnumFacing f, int slot) {
         output = handler.getStackInSlot(slot);
 	}
 }

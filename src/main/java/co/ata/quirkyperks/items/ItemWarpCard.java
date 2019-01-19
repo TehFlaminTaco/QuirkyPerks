@@ -22,6 +22,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.util.Constants;
 
 public class ItemWarpCard extends Item {
@@ -42,8 +43,10 @@ public class ItemWarpCard extends Item {
         NBTTagCompound nbt = stack.getTagCompound();
         if(nbt == null)
             return;
+        
+        World world = nbt.hasKey("dimension") ? DimensionManager.getWorld(nbt.getInteger("dimension")) : worldIn;
         // If we have a controller, and we still point to the correct controller.
-        if(nbt.hasKey("controllerID") && BlockWarpController.isController(worldIn, new BlockPos(nbt.getDouble("targetX"), nbt.getDouble("targetY"), nbt.getDouble("targetZ")), nbt.getInteger("controllerID")))
+        if(nbt.hasKey("controllerID") && BlockWarpController.isController(world, new BlockPos(nbt.getDouble("targetX"), nbt.getDouble("targetY"), nbt.getDouble("targetZ")), nbt.getInteger("controllerID")))
             tooltip.add(String.format("Synced to controller %s", nbt.getInteger("controllerID")));
     }
 

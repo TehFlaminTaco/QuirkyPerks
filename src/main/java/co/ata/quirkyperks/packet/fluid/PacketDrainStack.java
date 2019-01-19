@@ -1,10 +1,7 @@
 package co.ata.quirkyperks.packet.fluid;
 
-import java.util.List;
-
 import co.ata.quirkyperks.EnumInterfaceDirection;
 import co.ata.quirkyperks.EnumRequestType;
-import co.ata.quirkyperks.EnumWarpInterface;
 import co.ata.quirkyperks.WarpInterface;
 import co.ata.quirkyperks.items.ItemWarpCard;
 import co.ata.quirkyperks.packet.Packet;
@@ -27,13 +24,11 @@ public class PacketDrainStack extends PacketFluid {
     }
 
     @Override
-    public void touchHandler(TileWarper target, IFluidHandler handler, EnumFacing f) {
+    public void touchHandler(TileWarper target, WarpInterface iface, IFluidHandler handler, EnumFacing f) {
         if(stack.amount <= 0)
             return;
-        List<WarpInterface> interfaces = ItemWarpCard.getInterfaces(target.card(), EnumWarpInterface.Fluid);
-        //ItemStack pulledItem = handler.extractItem(slot, 1, true);
         
-        if(WarpInterface.canInterface(interfaces, ItemWarpCard.getFilters(target.card()), f, EnumInterfaceDirection.In, stack)){
+        if(iface.canInterface(ItemWarpCard.getFilters(target.card()), f, EnumInterfaceDirection.In, stack)){
             FluidStack pulled = handler.drain(stack, doDrain);
             stack.amount = Math.max(0, stack.amount - pulled.amount); // Just incase.
             drained.amount += pulled.amount;

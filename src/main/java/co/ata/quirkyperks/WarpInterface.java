@@ -12,6 +12,7 @@ import net.minecraftforge.fluids.FluidStack;
 public class WarpInterface {
     public EnumWarpInterface type = EnumWarpInterface.Item;
     public int id = -1;
+    public int priority = 0;
     public boolean[] outSides = new boolean[]{
         false,
         false,
@@ -31,6 +32,7 @@ public class WarpInterface {
 
     public void toNBT(NBTTagCompound nbt){
         nbt.setInteger("interface_type", type.ordinal());
+        nbt.setInteger("priority", priority);
         nbt.setInteger("interface_sides",
             (outSides[0]?1:0) +
             (outSides[1]?2:0) +
@@ -54,6 +56,7 @@ public class WarpInterface {
     public static WarpInterface fromNBT(NBTTagCompound nbt, int id){
         WarpInterface i = new WarpInterface(id);
         i.type = EnumWarpInterface.values()[nbt.getInteger("interface_type")];
+        i.priority = nbt.hasKey("priority") ? nbt.getInteger("priority") : 0;
         int c = nbt.getInteger("interface_sides");
         i.outSides[0] = (c&1) > 0;
         i.outSides[1] = (c&2) > 0;
@@ -69,6 +72,30 @@ public class WarpInterface {
          i.inSides[5] = (c&2048) > 0;
 
         return i;
+    }
+
+    public boolean canInterface(NonNullList<ItemStack> filters, EnumFacing f, EnumInterfaceDirection dir, ItemStack target){
+        if(ItemFilter.CanAccept(filters.get(id), target) && (dir.ordinal() & EnumInterfaceDirection.Out.ordinal())>0 && outSides[f.ordinal()])
+            return true;
+        if(ItemFilter.CanAccept(filters.get(id), target) && (dir.ordinal() & EnumInterfaceDirection.In.ordinal())>0 && inSides[f.ordinal()])
+            return true;
+        return false;
+    }
+
+    public boolean canInterface(NonNullList<ItemStack> filters, EnumFacing f, EnumInterfaceDirection dir, FluidStack target){
+        if(ItemFilter.CanAccept(filters.get(id), target) && (dir.ordinal() & EnumInterfaceDirection.Out.ordinal())>0 && outSides[f.ordinal()])
+            return true;
+        if(ItemFilter.CanAccept(filters.get(id), target) && (dir.ordinal() & EnumInterfaceDirection.In.ordinal())>0 && inSides[f.ordinal()])
+            return true;
+        return false;
+    }
+
+    public boolean canInterface(EnumFacing f, EnumInterfaceDirection dir){
+        if((dir.ordinal() & EnumInterfaceDirection.Out.ordinal())>0 && outSides[f.ordinal()])
+            return true;
+        if((dir.ordinal() & EnumInterfaceDirection.In.ordinal())>0 && inSides[f.ordinal()])
+            return true;
+        return false;
     }
 
     public static boolean canInterface(List<WarpInterface> interfaces, NonNullList<ItemStack> filters, EnumFacing f, EnumInterfaceDirection dir, ItemStack target){

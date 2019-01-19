@@ -24,6 +24,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.DimensionManager;
 
 public class BlockWarper extends BlockContainer {
 
@@ -92,7 +93,9 @@ public class BlockWarper extends BlockContainer {
             List<WarpInterface> interfaces = ItemWarpCard.getInterfaces(tc.card(), EnumWarpInterface.Button);
             if(!WarpInterface.canInterface(interfaces, ItemWarpCard.getFilters(tc.card()), facing, EnumInterfaceDirection.In, item))
                 return false;
-            return c.touch(new PacketActivate(tc, playerIn, hand, facing, hitX, hitY, hitZ)).worked;
+            if(!worldIn.isRemote)
+                c.touch(new PacketActivate(tc, playerIn, hand, facing, hitX, hitY, hitZ));
+            return true;
         }
 		
         NBTTagCompound nbt = item.getTagCompound();
@@ -105,7 +108,8 @@ public class BlockWarper extends BlockContainer {
             
         BlockPos targetPos = new BlockPos(nbt.getDouble("targetX"), nbt.getDouble("targetY"), nbt.getDouble("targetZ"));
         int cID = nbt.getInteger("controllerID");
-        if(!BlockWarpController.isController(worldIn, targetPos, cID))
+        World world = nbt.hasKey("dimension") ? DimensionManager.getWorld(nbt.getInteger("dimension")) : worldIn;
+        if(!BlockWarpController.isController(world, targetPos, cID))
             return false;
         
         if(worldIn.isRemote) // Client escapes here.

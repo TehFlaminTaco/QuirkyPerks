@@ -1,10 +1,14 @@
 package co.ata.quirkyperks.tiles;
 
-
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.List;
 
 import co.ata.quirkyperks.RequestInfo;
+import co.ata.quirkyperks.WarpInterface;
+import co.ata.quirkyperks.items.ItemWarpCard;
 import co.ata.quirkyperks.packet.Packet;
 import io.netty.util.internal.ThreadLocalRandom;
 import net.minecraft.nbt.NBTTagCompound;
@@ -19,15 +23,14 @@ public class TileWarpController extends TileEntity implements ITickable {
     public HashSet<RequestInfo> requests = new HashSet<RequestInfo>();
     public Hashtable<RequestInfo, Packet> finishedRequests = new Hashtable<RequestInfo, Packet>();
 
-
-    public TileWarpController(){
+    public TileWarpController() {
         super();
         markDirty();
     }
 
     @Override
     public void readFromNBT(NBTTagCompound compound) {
-        if(compound.hasKey("controllerID"))
+        if (compound.hasKey("controllerID"))
             controllerID = compound.getInteger("controllerID");
         super.readFromNBT(compound);
     }
@@ -54,38 +57,50 @@ public class TileWarpController extends TileEntity implements ITickable {
     }
 
     @Override
-    public SPacketUpdateTileEntity getUpdatePacket(){
+    public SPacketUpdateTileEntity getUpdatePacket() {
         NBTTagCompound nbtTag = new NBTTagCompound();
         nbtTag.setInteger("controllerID", controllerID);
         return new SPacketUpdateTileEntity(getPos(), 1, nbtTag);
     }
 
     @Override
-    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt){
+    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
         NBTTagCompound tag = pkt.getNbtCompound();
         controllerID = tag.getInteger("controllerID");
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends Packet> T touch(T p){
+    public <T extends Packet> T touch(T p) {
         knownWarpers.add(p.source);
         RequestInfo ri = new RequestInfo(p.source, p.type);
-        for(RequestInfo rr : requests){
-            if(rr.equals(ri)){
-                return (T)p.GetBlank();
+        for (RequestInfo rr : requests) {
+            if (rr.equals(ri)) {
+                return (T) p.GetBlank();
             }
         }
-        
-        requests.add(ri);
-        
 
+        requests.add(ri);
+        HashMap<WarpInterface, TileWarper> warpMap = new HashMap<WarpInterface, TileWarper>();
+        ArrayList<WarpInterface> all_faces = new ArrayList<WarpInterface>();
         for (TileWarper t : (HashSet<TileWarper>)knownWarpers.clone()) {
-            if(t.getPos() != p.source.getPos() && t.getController() == this)
-                p.touch(t);
-            if(p.burned) // Stop sorting through if it burns.
-                break;
+            if(!t.getPos().equals(p.source.getPos()) && t.getController() == this && t.getWorld().isRemote == getWorld().isRemote){
+                List<WarpInterface> interfaces = ItemWarpCard.getInterfaces(t.card());
+                for(WarpInterface i : interfaces)
+                    if(i.type == p.iface){
+                        all_faces.add(i);
+                        warpMap.put(i, t);
+                    }
+            }
         }
+        all_faces.sort((WarpInterface a, WarpInterface b)->a.priority - b.priority);
         
+        for(WarpInterface i : all_faces){
+            p.touch(warpMap.get(i), i);
+            if(p.burned){
+                break;
+            }
+        }
+
         requests.remove(ri);
         return p;
     }

@@ -2,13 +2,11 @@ package co.ata.quirkyperks.packet.inventory;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 
 import co.ata.quirkyperks.EnumInterfaceDirection;
 import co.ata.quirkyperks.EnumRequestType;
 import co.ata.quirkyperks.EnumWarpInterface;
 import co.ata.quirkyperks.WarpInterface;
-import co.ata.quirkyperks.items.ItemWarpCard;
 import co.ata.quirkyperks.packet.Packet;
 import co.ata.quirkyperks.tiles.TileWarper;
 import net.minecraft.tileentity.TileEntity;
@@ -21,17 +19,16 @@ import net.minecraftforge.items.IItemHandler;
 public abstract class PacketInventory extends Packet {
     EnumFacing facing;
     public PacketInventory(TileWarper source, EnumRequestType type, EnumFacing facing){
-        super(source, type);
+        super(source, type, EnumWarpInterface.Item);
         this.facing = facing;
     }
 
     @Override
-    public void touch(TileWarper target) {
+    public void touch(TileWarper target, WarpInterface iface) {
         HashSet<IItemHandler> handlers = new HashSet<IItemHandler>();
         HashMap<IItemHandler, EnumFacing> facings = new HashMap<IItemHandler, EnumFacing>();
-        List<WarpInterface> interfaces = ItemWarpCard.getInterfaces(target.card(), EnumWarpInterface.Item);
         for(EnumFacing f : EnumFacing.values()){
-            if(!WarpInterface.canInterface(interfaces, f, EnumInterfaceDirection.Both)) // Ignore ignorable inventories.
+            if(!iface.canInterface(f, EnumInterfaceDirection.Both))
                 continue;
             BlockPos tPos = target.getPos().offset(f);
             TileEntity te = target.getWorld().getTileEntity(tPos);
@@ -45,9 +42,9 @@ public abstract class PacketInventory extends Packet {
             }
         }
         for(IItemHandler handler : handlers){
-            touchHandler(target, handler, facings.get(handler));
+            touchHandler(target, iface, handler, facings.get(handler));
         }
     }
 
-    public abstract void touchHandler(TileWarper target, IItemHandler handler, EnumFacing f);
+    public abstract void touchHandler(TileWarper target, WarpInterface iface, IItemHandler handler, EnumFacing f);
 }

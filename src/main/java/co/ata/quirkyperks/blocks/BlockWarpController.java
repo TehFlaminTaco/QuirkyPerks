@@ -70,6 +70,7 @@ public class BlockWarpController extends Block{
 		nbt.setDouble("targetX", pos.getX());
 		nbt.setDouble("targetY", pos.getY());
 		nbt.setDouble("targetZ", pos.getZ());
+		nbt.setInteger("dimension", worldIn.provider.getDimension());
 		item.setTagCompound(nbt);
 		
 

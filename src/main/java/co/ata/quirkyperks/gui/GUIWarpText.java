@@ -42,8 +42,6 @@ public class GUIWarpText extends Gui
     private int cursorPosition;
     /** other selection position, maybe the same as the cursor */
     private int selectionEnd;
-    private int enabledColor = 14737632;
-    private int disabledColor = 7368816;
     /** True if this textbox is visible */
     private boolean visible = true;
     private GuiPageButtonList.GuiResponder guiResponder;
@@ -690,22 +688,6 @@ public class GUIWarpText extends Gui
     public void setEnableBackgroundDrawing(boolean enableBackgroundDrawingIn)
     {
         this.enableBackgroundDrawing = enableBackgroundDrawingIn;
-    }
-
-    /**
-     * Sets the color to use when drawing this text box's text. A different color is used if this text box is disabled.
-     */
-    public void setTextColor(int color)
-    {
-        this.enabledColor = color;
-    }
-
-    /**
-     * Sets the color to use for text in this text box when this text box is disabled.
-     */
-    public void setDisabledTextColour(int color)
-    {
-        this.disabledColor = color;
     }
 
     /**

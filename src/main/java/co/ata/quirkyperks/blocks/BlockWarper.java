@@ -24,6 +24,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.DimensionManager;
 
 public class BlockWarper extends BlockContainer {
@@ -108,7 +109,14 @@ public class BlockWarper extends BlockContainer {
             
         BlockPos targetPos = new BlockPos(nbt.getDouble("targetX"), nbt.getDouble("targetY"), nbt.getDouble("targetZ"));
         int cID = nbt.getInteger("controllerID");
-        World world = nbt.hasKey("dimension") ? DimensionManager.getWorld(nbt.getInteger("dimension")) : worldIn;
+        World world;
+        if(worldIn.isRemote)
+            if(nbt.hasKey("dimension") ? nbt.getInteger("dimension") == worldIn.provider.getDimension() : true)
+                world = Minecraft.getMinecraft().world;
+            else
+                return true;
+        else
+            world = nbt.hasKey("dimension") ? DimensionManager.getWorld(nbt.getInteger("dimension")) : worldIn;
         if(!BlockWarpController.isController(world, targetPos, cID))
             return false;
         

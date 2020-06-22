@@ -7,7 +7,6 @@ import co.ata.quirkyperks.items.ItemWarpCard;
 import co.ata.quirkyperks.packet.Packet;
 import co.ata.quirkyperks.tiles.TileWarper;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.items.IItemHandler;
 

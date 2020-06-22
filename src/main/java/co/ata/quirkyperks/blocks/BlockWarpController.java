@@ -79,6 +79,9 @@ public class BlockWarpController extends Block{
 
 	public static boolean isController(World worldIn, BlockPos point, int controllerID){
 		TileEntity te = worldIn.getTileEntity(point);
+		if(te == null){
+			return false;
+		}
 		if(!(te instanceof TileWarpController)){
 			return false;
 		}

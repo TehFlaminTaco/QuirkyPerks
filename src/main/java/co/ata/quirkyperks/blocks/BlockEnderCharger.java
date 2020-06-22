@@ -20,7 +20,7 @@ public class BlockEnderCharger extends BlockContainer {
 		setHardness(2.0f);
 		setUnlocalizedName("endercharger");
 		setRegistryName("endercharger");
-        setCreativeTab(QuirkyPerks.tabQuirkyPerks);
+        //setCreativeTab(QuirkyPerks.tabQuirkyPerks);
     }
 
     @Override

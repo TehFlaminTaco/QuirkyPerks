@@ -85,10 +85,10 @@ public class GUICard extends GuiContainer implements ITooltipSetter{
         priorityField.setVisible(true);
         priorityField.setText("" + interfaces.get(currentInterface).priority);
 
-        addButton(new GUIWarpButton(this, I18n.format("quirky.gui.remove_interface"),
+        /*addButton(new GUIWarpButton(this, I18n.format("quirky.gui.remove_interface"),
             1, (width + xSize) / 2 - 16 - 8, (height - ySize) / 2 + 8,
             TEX_MINUS
-        ));
+        ));*/
 
         for(int i = 0; i < interfaces.size(); i++) { // Add a new button for each interface.
             GuiButton b = addButton(new GUIWarpButton(2 + i, (width - xSize) / 2 + (8 + 18 * i), (height - ySize) / 2 + 20, interfaces.get(i).type.icon));

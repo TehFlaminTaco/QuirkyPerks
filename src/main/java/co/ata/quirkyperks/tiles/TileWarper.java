@@ -34,6 +34,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.client.Minecraft;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.capabilities.Capability;
@@ -99,7 +100,14 @@ public class TileWarper extends TileEntity implements ITickable, ICapabilityProv
         if(controllerID() < 0)
             return null;
         NBTTagCompound nbt = card().getTagCompound();
-        World worl = nbt.hasKey("dimension") ? DimensionManager.getWorld(nbt.getInteger("dimension")) : world;
+        World worl;
+        if(getWorld().isRemote)
+            if(nbt.hasKey("dimension") ? nbt.getInteger("dimension") == getWorld().provider.getDimension() : true)
+                worl = Minecraft.getMinecraft().world;
+            else
+                return null;
+        else
+            worl = nbt.hasKey("dimension") ? DimensionManager.getWorld(nbt.getInteger("dimension")) : world;
         if(!BlockWarpController.isController(worl, targetPos(), controllerID()))
             return null;
         return (TileWarpController)worl.getTileEntity(targetPos());

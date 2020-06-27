@@ -1,12 +1,12 @@
 package co.ata.quirkyperks.tiles;
 
-
-
-
 import co.ata.quirkyperks.EnumInterfaceDirection;
 import co.ata.quirkyperks.EnumWarpInterface;
+import co.ata.quirkyperks.QuirkyPerks;
+import co.ata.quirkyperks.QuirkyProxy;
 import co.ata.quirkyperks.WarpInterface;
 import co.ata.quirkyperks.blocks.BlockWarpController;
+import co.ata.quirkyperks.items.IWarpCardBase;
 import co.ata.quirkyperks.items.ItemWarpCard;
 import co.ata.quirkyperks.packet.energy.PacketCanExtract;
 import co.ata.quirkyperks.packet.energy.PacketCanReceive;
@@ -34,11 +34,8 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.client.Minecraft;
 import net.minecraft.world.World;
-import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fluids.FluidStack;
@@ -48,7 +45,7 @@ import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 
-public class TileWarper extends TileEntity implements ITickable, ICapabilityProvider{
+public class TileWarper extends TileEntity implements ITickable{
 
     public NonNullList<ItemStack> storedCard = NonNullList.<ItemStack>withSize(1, ItemStack.EMPTY);
     @Override
@@ -96,18 +93,14 @@ public class TileWarper extends TileEntity implements ITickable, ICapabilityProv
         return false;
     }
 
+    
     public TileWarpController getController(){
         if(controllerID() < 0)
             return null;
         NBTTagCompound nbt = card().getTagCompound();
-        World worl;
-        if(getWorld().isRemote)
-            if(nbt.hasKey("dimension") ? nbt.getInteger("dimension") == getWorld().provider.getDimension() : true)
-                worl = Minecraft.getMinecraft().world;
-            else
-                return null;
-        else
-            worl = nbt.hasKey("dimension") ? DimensionManager.getWorld(nbt.getInteger("dimension")) : world;
+        World worl = QuirkyProxy.getWorldFromID(nbt.hasKey("dimension") ? nbt.getInteger("dimension") : null, world);
+        if(worl == null)
+            return null;
         if(!BlockWarpController.isController(worl, targetPos(), controllerID()))
             return null;
         return (TileWarpController)worl.getTileEntity(targetPos());
@@ -172,20 +165,20 @@ public class TileWarper extends TileEntity implements ITickable, ICapabilityProv
     @Override
     public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
         if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
-            return WarpInterface.canInterface(ItemWarpCard.getInterfaces(card(), EnumWarpInterface.Item), facing, EnumInterfaceDirection.Both);
+            return WarpInterface.canInterface(IWarpCardBase.getInterfacesFromItem(card(), EnumWarpInterface.Item), facing, EnumInterfaceDirection.Both);
         if(capability == CapabilityEnergy.ENERGY)
-            return WarpInterface.canInterface(ItemWarpCard.getInterfaces(card(), EnumWarpInterface.Energy), facing, EnumInterfaceDirection.Both);
+            return WarpInterface.canInterface(IWarpCardBase.getInterfacesFromItem(card(), EnumWarpInterface.Energy), facing, EnumInterfaceDirection.Both);
         if(capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
-            return WarpInterface.canInterface(ItemWarpCard.getInterfaces(card(), EnumWarpInterface.Fluid), facing, EnumInterfaceDirection.Both);
+            return WarpInterface.canInterface(IWarpCardBase.getInterfacesFromItem(card(), EnumWarpInterface.Fluid), facing, EnumInterfaceDirection.Both);
         return super.hasCapability(capability, facing);
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-    if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || capability == CapabilityEnergy.ENERGY || capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
-        return (T) new SidedWarper(this, facing);
-    return super.getCapability(capability, facing);
+        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || capability == CapabilityEnergy.ENERGY || capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
+            return (T) new SidedWarper(this, facing);
+        return super.getCapability(capability, facing);
     }
 
 }
@@ -208,7 +201,7 @@ class SidedWarper implements IItemHandler, IEnergyStorage, IFluidHandler {
         TileWarpController c = warper.getController();
         if(c == null)
             return 0;
-        if(!WarpInterface.canInterface(ItemWarpCard.getInterfaces(warper.card(), EnumWarpInterface.Item), facing, EnumInterfaceDirection.Both))
+        if(!WarpInterface.canInterface(IWarpCardBase.getInterfacesFromItem(warper.card(), EnumWarpInterface.Item), facing, EnumInterfaceDirection.Both))
             return 0;
         PacketInvSize size = c.touch(new PacketInvSize(warper, facing));
         return size.size;
@@ -219,7 +212,7 @@ class SidedWarper implements IItemHandler, IEnergyStorage, IFluidHandler {
         TileWarpController c = warper.getController();
         if(c == null)
             return stack;
-        if(!WarpInterface.canInterface(ItemWarpCard.getInterfaces(warper.card(), EnumWarpInterface.Item), ItemWarpCard.getFilters(warper.card()), facing, EnumInterfaceDirection.In, stack))
+        if(!WarpInterface.canInterface(IWarpCardBase.getInterfacesFromItem(warper.card(), EnumWarpInterface.Item), IWarpCardBase.getFiltersFromItem(warper.card()), facing, EnumInterfaceDirection.In, stack))
             return stack;
         PacketInsert p = c.touch(new PacketInsert(warper, facing, slot, stack, simulate));
         return p.output;
@@ -231,7 +224,7 @@ class SidedWarper implements IItemHandler, IEnergyStorage, IFluidHandler {
         if(c == null)
             return ItemStack.EMPTY;
         PacketExtract pullTest = c.touch(new PacketExtract(warper, facing, slot, amount, true));
-        if(!WarpInterface.canInterface(ItemWarpCard.getInterfaces(warper.card(), EnumWarpInterface.Item), ItemWarpCard.getFilters(warper.card()), facing, EnumInterfaceDirection.Out, pullTest.output))
+        if(!WarpInterface.canInterface(IWarpCardBase.getInterfacesFromItem(warper.card(), EnumWarpInterface.Item), IWarpCardBase.getFiltersFromItem(warper.card()), facing, EnumInterfaceDirection.Out, pullTest.output))
             return ItemStack.EMPTY;
         PacketExtract p = simulate ? pullTest : c.touch(new PacketExtract(warper, facing, slot, amount, false));
         return p.output;
@@ -331,7 +324,7 @@ class SidedWarper implements IItemHandler, IEnergyStorage, IFluidHandler {
         TileWarpController c = warper.getController();
         if(c == null)
             return 0;
-        if(!WarpInterface.canInterface(ItemWarpCard.getInterfaces(warper.card(), EnumWarpInterface.Fluid), ItemWarpCard.getFilters(warper.card()), facing, EnumInterfaceDirection.In, resource))
+        if(!WarpInterface.canInterface(IWarpCardBase.getInterfacesFromItem(warper.card(), EnumWarpInterface.Fluid), IWarpCardBase.getFiltersFromItem(warper.card()), facing, EnumInterfaceDirection.In, resource))
             return 0;
         PacketFill p = c.touch(new PacketFill(warper, facing, resource, doFill));
         return p.filled;
@@ -342,7 +335,7 @@ class SidedWarper implements IItemHandler, IEnergyStorage, IFluidHandler {
         TileWarpController c = warper.getController();
         if(c == null)
             return null;
-        if(!WarpInterface.canInterface(ItemWarpCard.getInterfaces(warper.card(), EnumWarpInterface.Fluid), ItemWarpCard.getFilters(warper.card()), facing, EnumInterfaceDirection.Out, resource))
+        if(!WarpInterface.canInterface(IWarpCardBase.getInterfacesFromItem(warper.card(), EnumWarpInterface.Fluid), IWarpCardBase.getFiltersFromItem(warper.card()), facing, EnumInterfaceDirection.Out, resource))
             return null;
         PacketDrainStack p = c.touch(new PacketDrainStack(warper, facing, resource, doDrain));
         return p.drained;
@@ -355,7 +348,7 @@ class SidedWarper implements IItemHandler, IEnergyStorage, IFluidHandler {
             return null;
         
         // Item Filters are handled by the packet. **THIS IS UNSAFE**
-        if(!WarpInterface.canInterface(ItemWarpCard.getInterfaces(warper.card(), EnumWarpInterface.Fluid), facing, EnumInterfaceDirection.Out))
+        if(!WarpInterface.canInterface(IWarpCardBase.getInterfacesFromItem(warper.card(), EnumWarpInterface.Fluid), facing, EnumInterfaceDirection.Out))
             return null;
         PacketDrainAmount p = c.touch(new PacketDrainAmount(warper, facing, maxDrain, doDrain));
         return p.drained;

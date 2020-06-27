@@ -23,10 +23,11 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.client.Minecraft;
-import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemWarpCard extends Item {
+public class ItemWarpCard extends Item implements IWarpCardBase {
     public static ItemWarpCard INSTANCE = new ItemWarpCard(); 
 
     public ItemWarpCard(){
@@ -38,6 +39,7 @@ public class ItemWarpCard extends Item {
         setMaxDamage(0);
     }
 
+    @SideOnly(Side.CLIENT)
     @Override
     public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         super.addInformation(stack, worldIn, tooltip, flagIn);
@@ -66,8 +68,14 @@ public class ItemWarpCard extends Item {
         }
         return super.onItemRightClick(worldIn, playerIn, handIn);
     }
-    
-    public static List<WarpInterface> getInterfaces(ItemStack stack){
+
+    public NonNullList<ItemStack> getFilters(ItemStack card){
+        NonNullList<ItemStack> filters = NonNullList.<ItemStack>withSize(8, ItemStack.EMPTY);
+		ItemStackHelper.loadAllItems(card.getOrCreateSubCompound("filters"), filters);
+        return filters;
+    }
+
+    public List<WarpInterface> getInterfaces(ItemStack stack){
         ArrayList<WarpInterface> interfaces = new ArrayList<WarpInterface>();
 
         // Empty, invalid, or stacks without tag compounds are ignored.
@@ -86,19 +94,11 @@ public class ItemWarpCard extends Item {
             if(t instanceof NBTTagCompound)
                 interfaces.add(WarpInterface.fromNBT((NBTTagCompound)t, id));
         }
-            
-        
 
         return interfaces;
     }
 
-    public static NonNullList<ItemStack> getFilters(ItemStack card){
-        NonNullList<ItemStack> filters = NonNullList.<ItemStack>withSize(8, ItemStack.EMPTY);
-		ItemStackHelper.loadAllItems(card.getOrCreateSubCompound("filters"), filters);
-        return filters;
-    }
-
-    public static List<WarpInterface> getInterfaces(ItemStack stack, EnumWarpInterface type){
+    public List<WarpInterface> getInterfaces(ItemStack stack, EnumWarpInterface type){
         ArrayList<WarpInterface> interfaces = new ArrayList<WarpInterface>();
 
         // Empty, invalid, or stacks without tag compounds are ignored.

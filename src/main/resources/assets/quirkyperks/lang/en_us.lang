@@ -1,10 +1,12 @@
 tile.warpcontroller.name=Warp Controller
 tile.warper.name=Warper
+tile.endercharger.name=Ender Charger
 
 item.warpcard.name=Warp Card
 item.filter.name=Filter
 item.infusedsteel.name=Ender Infused Steel
 item.enderdust.name=Ender Dust
+item.fauxenderdust.name=Faux Ender Dust
 
 itemGroup.tabQuirkyPerks=Quirky Perks
 

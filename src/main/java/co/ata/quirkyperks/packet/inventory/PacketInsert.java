@@ -3,7 +3,7 @@ package co.ata.quirkyperks.packet.inventory;
 import co.ata.quirkyperks.EnumInterfaceDirection;
 import co.ata.quirkyperks.EnumRequestType;
 import co.ata.quirkyperks.WarpInterface;
-import co.ata.quirkyperks.items.ItemWarpCard;
+import co.ata.quirkyperks.items.IWarpCardBase;
 import co.ata.quirkyperks.packet.Packet;
 import co.ata.quirkyperks.tiles.TileWarper;
 import net.minecraft.item.ItemStack;
@@ -31,7 +31,7 @@ public class PacketInsert extends PacketInventorySlot {
 
     @Override
     public void touchSlot(TileWarper target, WarpInterface iface, IItemHandler handler, EnumFacing f, int slot) {
-        if(!iface.canInterface(ItemWarpCard.getFilters(target.card()), f, EnumInterfaceDirection.Out, stack))
+        if(!iface.canInterface(IWarpCardBase.getFiltersFromItem(target.card()), f, EnumInterfaceDirection.Out, stack))
             output = stack;
         else
             output = handler.insertItem(slot, stack, simulate);

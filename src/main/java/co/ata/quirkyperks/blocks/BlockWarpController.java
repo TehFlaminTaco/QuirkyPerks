@@ -1,8 +1,7 @@
 package co.ata.quirkyperks.blocks;
 
-
 import co.ata.quirkyperks.QuirkyPerks;
-import co.ata.quirkyperks.items.ItemWarpCard;
+import co.ata.quirkyperks.items.IWarpCardBase;
 import co.ata.quirkyperks.tiles.TileWarpController;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -46,7 +45,7 @@ public class BlockWarpController extends Block{
 		ItemStack item = playerIn.getHeldItemMainhand();
 		if(item == null)
 			return false;
-		if(item.getItem() != ItemWarpCard.INSTANCE)
+		if(!(item.getItem() instanceof IWarpCardBase))
 			return false;
 		
 		NBTTagCompound nbt;

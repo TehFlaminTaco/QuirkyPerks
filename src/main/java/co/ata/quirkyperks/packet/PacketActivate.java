@@ -4,7 +4,7 @@ import co.ata.quirkyperks.EnumInterfaceDirection;
 import co.ata.quirkyperks.EnumRequestType;
 import co.ata.quirkyperks.EnumWarpInterface;
 import co.ata.quirkyperks.WarpInterface;
-import co.ata.quirkyperks.items.ItemWarpCard;
+import co.ata.quirkyperks.items.IWarpCardBase;
 import co.ata.quirkyperks.tiles.TileWarper;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -35,7 +35,7 @@ public class PacketActivate extends Packet {
     @Override
     public void touch(TileWarper target, WarpInterface iface) {
         for(EnumFacing f : EnumFacing.values()){
-            if(!iface.canInterface(ItemWarpCard.getFilters(target.card()), f, EnumInterfaceDirection.Out, playerIn.getHeldItemMainhand()))
+            if(!iface.canInterface(IWarpCardBase.getFiltersFromItem(target.card()), f, EnumInterfaceDirection.Out, playerIn.getHeldItemMainhand()))
                 continue;
             BlockPos tPos = target.getPos().offset(f);
             IBlockState state = target.getWorld().getBlockState(tPos);

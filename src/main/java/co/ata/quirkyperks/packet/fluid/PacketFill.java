@@ -3,7 +3,7 @@ package co.ata.quirkyperks.packet.fluid;
 import co.ata.quirkyperks.EnumInterfaceDirection;
 import co.ata.quirkyperks.EnumRequestType;
 import co.ata.quirkyperks.WarpInterface;
-import co.ata.quirkyperks.items.ItemWarpCard;
+import co.ata.quirkyperks.items.IWarpCardBase;
 import co.ata.quirkyperks.packet.Packet;
 import co.ata.quirkyperks.tiles.TileWarper;
 import net.minecraft.util.EnumFacing;
@@ -26,7 +26,7 @@ public class PacketFill extends PacketFluid {
         if(stack.amount <= 0)
             return;
         
-        if(iface.canInterface(ItemWarpCard.getFilters(target.card()), f, EnumInterfaceDirection.Out, stack)){
+        if(iface.canInterface(IWarpCardBase.getFiltersFromItem(target.card()), f, EnumInterfaceDirection.Out, stack)){
             int pulled = handler.fill(stack, doFill);
             stack.amount = Math.max(0, stack.amount - pulled); // Just incase.
             filled += pulled;

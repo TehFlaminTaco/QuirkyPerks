@@ -4,22 +4,21 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.relauncher.Side;
-
-
 import co.ata.quirkyperks.items.ItemWarpCard;
 
 @Mod(modid = QuirkyPerks.MODID, name = QuirkyPerks.NAME, version = QuirkyPerks.VERSION)
 public class QuirkyPerks
 {
+    
     public static final String MODID = "quirkyperks";
     public static final String NAME = "QuirkyPerks";
-    public static final String VERSION = "1.2";
-
+    public static final String VERSION = "1.3.2";
 
     public static QuirkyPerks INSTANCE;
 

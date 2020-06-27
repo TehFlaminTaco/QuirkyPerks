@@ -1,6 +1,5 @@
 package co.ata.quirkyperks.gui;
 
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,7 +10,7 @@ import co.ata.quirkyperks.PacketUpdateCard;
 import co.ata.quirkyperks.QuirkyPacketHandler;
 import co.ata.quirkyperks.QuirkyPerks;
 import co.ata.quirkyperks.WarpInterface;
-import co.ata.quirkyperks.items.ItemWarpCard;
+import co.ata.quirkyperks.items.IWarpCardBase;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
@@ -199,27 +198,10 @@ public class GUICard extends GuiContainer implements ITooltipSetter{
         
         if(keyCode == 1)
             this.mc.player.closeScreen();
-
-        /*this.serverNameField.textboxKeyTyped(typedChar, keyCode);
-        this.serverIPField.textboxKeyTyped(typedChar, keyCode);
-
-        if (keyCode == 15)
-        {
-            this.serverNameField.setFocused(!this.serverNameField.isFocused());
-            this.serverIPField.setFocused(!this.serverIPField.isFocused());
-        }
-
-        if (keyCode == 28 || keyCode == 156)
-        {
-            this.actionPerformed(this.buttonList.get(0));
-        }
-
-        (this.buttonList.get(0)).enabled = !this.serverIPField.getText().isEmpty() && this.serverIPField.getText().split(":").length > 0 && !this.serverNameField.getText().isEmpty();*/
     }
 
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException
     {
-        System.out.println(String.format("%s, %s", mouseX, mouseY));
         priorityField.mouseClicked(mouseX - ((width - xSize) / 2), mouseY - ((height - ySize) / 2), mouseButton);
         super.mouseClicked(mouseX, mouseY, mouseButton);
     }
@@ -246,7 +228,7 @@ public class GUICard extends GuiContainer implements ITooltipSetter{
 
         this.playerInv = playerInv;
 
-        interfaces = ItemWarpCard.getInterfaces(card);
+        interfaces = IWarpCardBase.getInterfacesFromItem(card);
         
     }
 

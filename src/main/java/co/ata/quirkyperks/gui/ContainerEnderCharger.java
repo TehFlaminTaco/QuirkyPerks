@@ -1,70 +1,40 @@
 package co.ata.quirkyperks.gui;
 
-import co.ata.quirkyperks.items.ItemFilter;
+import co.ata.quirkyperks.tiles.TileEnderCharger;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.NonNullList;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.SlotItemHandler;
 
-public class ContainerCard extends Container {
+public class ContainerEnderCharger extends Container {
 
-    public static final int GUI_ID = 1;
-	public final ItemStack card;
+	public static final int GUI_ID = 3;
 	
-	// 8, one for each interface.
-	NonNullList<ItemStack> filters = NonNullList.<ItemStack>withSize(8, ItemStack.EMPTY);
-	NBTTagCompound filterNBT = new NBTTagCompound();
+	public TileEnderCharger charger;
 
 	IItemHandlerModifiable iHandler = new IItemHandlerModifiable(){
 
         @Override
         public int getSlots() {
-            return 17;
+            return 8;
         }
 
         @Override
         public ItemStack getStackInSlot(int slot) {
-            return filters.get(filterSlot);
+            return charger.getStackInSlot(slot);
         }
 
         @Override
         public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
-			if(stack.isEmpty())
-				return stack; // Just incase.
-			if(stack.getItem() != ItemFilter.INSTANCE)
-				return stack; // Cannont insert something that isn't a filter.
-			if(!filters.get(filterSlot).isEmpty())
-				return stack; // Already contains a filter.
-			
-			if(!simulate){
-				filters.set(filterSlot, stack);
-				ItemStackHelper.saveAllItems(filterNBT, filters);
-			}
-            return ItemStack.EMPTY;
+			return charger.insertItem(slot, stack, simulate);
         }
 
         @Override
         public ItemStack extractItem(int slot, int amount, boolean simulate) {
-			if(amount == 0)
-				return ItemStack.EMPTY; // Cannot extract nothing.
-			
-			ItemStack held = filters.get(filterSlot);
-			if(held.isEmpty())
-				return ItemStack.EMPTY; // Ditto.
-			
-
-			if(!simulate){
-				filters.set(filterSlot, ItemStack.EMPTY);
-				ItemStackHelper.saveAllItems(filterNBT, filters);
-			}
-
-            return held;
+			return charger.extractItem(slot, amount, simulate);
         }
 
         @Override
@@ -74,42 +44,40 @@ public class ContainerCard extends Container {
 
         @Override
         public void setStackInSlot(int slot, ItemStack stack) {
-            // Last time I trusted this it hurt me. But I think I'm ready to love again.
-            filters.set(filterSlot, stack);
-			ItemStackHelper.saveAllItems(filterNBT, filters);
+            charger.setStackInSlot(slot, stack);
         }
 
     };
 
 
 	public int filterSlot = 0;
-    public ContainerCard(InventoryPlayer playerInv, ItemStack card){
-        this.card = card;
+    public ContainerEnderCharger(InventoryPlayer playerInv, TileEnderCharger charger){
+        this.charger = charger;
 
-		NBTTagCompound allTags = (card.hasTagCompound() ? card.getTagCompound() : new NBTTagCompound());
-		filterNBT = card.getOrCreateSubCompound("filters");
-		allTags.setTag("filters", filterNBT);
-        card.setTagCompound(allTags);
-
-		ItemStackHelper.loadAllItems(filterNBT, filters);
-
-		addSlotToContainer(new SlotItemHandler(iHandler, 0, 26, 84));
+		addSlotToContainer(new SlotItemHandler(iHandler, 0, 62, 19));
+		addSlotToContainer(new SlotItemHandler(iHandler, 1, 80, 19));
+		addSlotToContainer(new SlotItemHandler(iHandler, 2, 98, 19));
+		addSlotToContainer(new SlotItemHandler(iHandler, 3, 98, 37));
+		addSlotToContainer(new SlotItemHandler(iHandler, 4, 98, 55));
+		addSlotToContainer(new SlotItemHandler(iHandler, 5, 80, 55));
+		addSlotToContainer(new SlotItemHandler(iHandler, 6, 62, 55));
+		addSlotToContainer(new SlotItemHandler(iHandler, 7, 62, 37));
 
         for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 9; j++) {
-				addSlotToContainer(new Slot(playerInv, j + i * 9 + 9, 8 + j * 18, 116 + i * 18));
+				addSlotToContainer(new Slot(playerInv, j + i * 9 + 9, 8 + j * 18, 91 + i * 18));
 			}
 		}
 	
 		for (int k = 0; k < 9; k++) {
-			addSlotToContainer(new Slot(playerInv, k, 8 + k * 18, 174));
+			addSlotToContainer(new Slot(playerInv, k, 8 + k * 18, 149));
 		}
     }
 
 
     @Override
     public boolean canInteractWith(EntityPlayer playerIn) {
-        return playerIn.getHeldItemMainhand() == card;
+        return true;
     }
     
     @Override
@@ -121,12 +89,13 @@ public class ContainerCard extends Container {
 			ItemStack itemstack1 = slot.getStack();
 			itemstack = itemstack1.copy();
 	
-            int containerSlots = 1;
+            int containerSlots = 8;
             if(index < containerSlots){
 				if(!mergeItemStack(itemstack1, containerSlots + 9, inventorySlots.size(), true)){
 					return ItemStack.EMPTY;
 				}
-			}else if(itemstack1.getItem() == ItemFilter.INSTANCE && this.mergeItemStack(itemstack1, 0, 1, true)){
+			}else if(this.mergeItemStack(itemstack1, 0, containerSlots, false)){
+				while(!itemstack1.isEmpty()&&this.mergeItemStack(itemstack1, 0, containerSlots, false));
 				return ItemStack.EMPTY;
 			}else if (index < containerSlots + 9) {
 				if (!this.mergeItemStack(itemstack1, containerSlots + 9, inventorySlots.size(), true)) {

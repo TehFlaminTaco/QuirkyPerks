@@ -5,7 +5,9 @@ import java.util.List;
 import co.ata.quirkyperks.EnumInterfaceDirection;
 import co.ata.quirkyperks.EnumWarpInterface;
 import co.ata.quirkyperks.QuirkyPerks;
+import co.ata.quirkyperks.QuirkyProxy;
 import co.ata.quirkyperks.WarpInterface;
+import co.ata.quirkyperks.items.IWarpCardBase;
 import co.ata.quirkyperks.items.ItemWarpCard;
 import co.ata.quirkyperks.packet.PacketActivate;
 import co.ata.quirkyperks.tiles.TileWarpController;
@@ -24,8 +26,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.client.Minecraft;
-import net.minecraftforge.common.DimensionManager;
 
 public class BlockWarper extends BlockContainer {
 
@@ -91,8 +91,8 @@ public class BlockWarper extends BlockContainer {
             TileWarpController c = tc.getController();
             if(c == null)
                 return false;
-            List<WarpInterface> interfaces = ItemWarpCard.getInterfaces(tc.card(), EnumWarpInterface.Button);
-            if(!WarpInterface.canInterface(interfaces, ItemWarpCard.getFilters(tc.card()), facing, EnumInterfaceDirection.In, item))
+            List<WarpInterface> interfaces = IWarpCardBase.getInterfacesFromItem(tc.card(), EnumWarpInterface.Button);
+            if(!WarpInterface.canInterface(interfaces, IWarpCardBase.getFiltersFromItem(tc.card()), facing, EnumInterfaceDirection.In, item))
                 return false;
             if(!worldIn.isRemote)
                 c.touch(new PacketActivate(tc, playerIn, hand, facing, hitX, hitY, hitZ));
@@ -109,14 +109,11 @@ public class BlockWarper extends BlockContainer {
             
         BlockPos targetPos = new BlockPos(nbt.getDouble("targetX"), nbt.getDouble("targetY"), nbt.getDouble("targetZ"));
         int cID = nbt.getInteger("controllerID");
-        World world;
-        if(worldIn.isRemote)
-            if(nbt.hasKey("dimension") ? nbt.getInteger("dimension") == worldIn.provider.getDimension() : true)
-                world = Minecraft.getMinecraft().world;
-            else
-                return true;
-        else
-            world = nbt.hasKey("dimension") ? DimensionManager.getWorld(nbt.getInteger("dimension")) : worldIn;
+        World world = QuirkyProxy.getWorldFromID(nbt.hasKey("dimension") ? nbt.getInteger("dimension") : null, worldIn);
+        
+        if(world == null)
+            return worldIn.isRemote; // Strange I know, but the behaviour I want. 
+
         if(!BlockWarpController.isController(world, targetPos, cID))
             return false;
         

@@ -14,7 +14,10 @@ import co.ata.quirkyperks.tiles.TileWarpController;
 import co.ata.quirkyperks.tiles.TileWarper;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.event.RegistryEvent;
@@ -25,10 +28,18 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 @Mod.EventBusSubscriber(modid=QuirkyPerks.MODID)
 public class QuirkyEventHandler{
     static List<ItemGeneric> genericItems = new ArrayList<ItemGeneric>();
- 
+
+    public static ItemGeneric itemFauxenderdust;
+    
     public QuirkyEventHandler(){
         genericItems.add(new ItemGeneric("infusedsteel", "ingotEnderSteel"));
         genericItems.add(new ItemGeneric("enderdust", "nuggetEnderpearl"));
+        genericItems.add(itemFauxenderdust = new ItemGeneric("fauxenderdust"){
+            @Override
+            public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+                tooltip.add("Works just as good as the real deal!");
+            }
+        });
     }
 
     @SubscribeEvent

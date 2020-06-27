@@ -6,9 +6,10 @@ import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
 
+import co.ata.quirkyperks.QuirkyProxy;
 import co.ata.quirkyperks.RequestInfo;
 import co.ata.quirkyperks.WarpInterface;
-import co.ata.quirkyperks.items.ItemWarpCard;
+import co.ata.quirkyperks.items.IWarpCardBase;
 import co.ata.quirkyperks.packet.Packet;
 import io.netty.util.internal.ThreadLocalRandom;
 import net.minecraft.nbt.NBTTagCompound;
@@ -39,7 +40,6 @@ public class TileWarpController extends TileEntity implements ITickable {
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
         super.writeToNBT(compound);
         compound.setInteger("controllerID", controllerID);
-        System.out.println(String.format("WRITING TO COMPOUND %s", controllerID));
         return compound;
     }
 
@@ -84,7 +84,7 @@ public class TileWarpController extends TileEntity implements ITickable {
         ArrayList<WarpInterface> all_faces = new ArrayList<WarpInterface>();
         for (TileWarper t : (HashSet<TileWarper>)knownWarpers.clone()) {
             if(!t.getPos().equals(p.source.getPos()) && t.getController() == this && t.getWorld().isRemote == getWorld().isRemote){
-                List<WarpInterface> interfaces = ItemWarpCard.getInterfaces(t.card());
+                List<WarpInterface> interfaces = IWarpCardBase.getInterfacesFromItem(t.card());
                 for(WarpInterface i : interfaces)
                     if(i.type == p.iface){
                         all_faces.add(i);
@@ -110,6 +110,7 @@ public class TileWarpController extends TileEntity implements ITickable {
     @Override
     public void update() {
         requests.clear();
+        QuirkyProxy.pokeWorld(world);
         
         cleanCheck++;
         if(cleanCheck > 10){
@@ -123,6 +124,7 @@ public class TileWarpController extends TileEntity implements ITickable {
     }
 
 	public void wake(TileWarper tileWarper) {
+        QuirkyProxy.pokeWorld(tileWarper.getWorld());
         knownWarpers.add(tileWarper);
 	}
 }

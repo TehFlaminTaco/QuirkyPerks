@@ -9,6 +9,7 @@ import co.ata.quirkyperks.blocks.BlockWarper;
 import co.ata.quirkyperks.items.ItemFilter;
 import co.ata.quirkyperks.items.ItemGeneric;
 import co.ata.quirkyperks.items.ItemWarpCard;
+import co.ata.quirkyperks.items.ItemWarpChip;
 import co.ata.quirkyperks.tiles.TileEnderCharger;
 import co.ata.quirkyperks.tiles.TileWarpController;
 import co.ata.quirkyperks.tiles.TileWarper;
@@ -60,6 +61,7 @@ public class QuirkyEventHandler{
         event.getRegistry().registerAll(
             // STANDALONE ITEMS
             ItemWarpCard.INSTANCE,
+            ItemWarpChip.INSTANCE,
             ItemFilter.INSTANCE,
 
             // ITEM BLOCKS
@@ -82,6 +84,7 @@ public class QuirkyEventHandler{
             registerRender(i);
         }
         registerRender(ItemWarpCard.INSTANCE);
+        registerRender(ItemWarpChip.INSTANCE);
         registerRender(ItemFilter.INSTANCE);
 	}
 	

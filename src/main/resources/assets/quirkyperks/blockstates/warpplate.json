@@ -1,0 +1,11 @@
+{
+    "variants": {
+        "facing=down": { "model": "quirkyperks:warpplate.obj", "x": 90},
+        "facing=up": { "model": "quirkyperks:warpplate.obj", "x": 270 },
+        "facing=north": { "model": "quirkyperks:warpplate.obj", "y": 0},
+        "facing=south": { "model": "quirkyperks:warpplate.obj", "y": 180},
+        "facing=west": { "model": "quirkyperks:warpplate.obj", "y": 270},
+        "facing=east": { "model": "quirkyperks:warpplate.obj", "y": 90},
+        "normal": { "model": "quirkyperks:warpplate.obj", "x": 90}
+    }
+}

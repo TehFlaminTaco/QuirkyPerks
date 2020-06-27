@@ -5,6 +5,7 @@ import java.util.List;
 
 import co.ata.quirkyperks.blocks.BlockEnderCharger;
 import co.ata.quirkyperks.blocks.BlockWarpController;
+import co.ata.quirkyperks.blocks.BlockWarpPlate;
 import co.ata.quirkyperks.blocks.BlockWarper;
 import co.ata.quirkyperks.items.ItemFilter;
 import co.ata.quirkyperks.items.ItemGeneric;
@@ -21,6 +22,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -33,6 +35,7 @@ public class QuirkyEventHandler{
     public static ItemGeneric itemFauxenderdust;
     
     public QuirkyEventHandler(){
+        OBJLoader.INSTANCE.addDomain(QuirkyPerks.MODID);
         genericItems.add(new ItemGeneric("infusedsteel", "ingotEnderSteel"));
         genericItems.add(new ItemGeneric("enderdust", "nuggetEnderpearl"));
         genericItems.add(itemFauxenderdust = new ItemGeneric("fauxenderdust"){
@@ -48,11 +51,13 @@ public class QuirkyEventHandler{
         event.getRegistry().registerAll(
             BlockWarpController.INSTANCE,
             BlockWarper.INSTANCE,
+            BlockWarpPlate.INSTANCE,
             BlockEnderCharger.INSTANCE
         );
 
         GameRegistry.registerTileEntity(TileWarpController.class,   BlockWarpController.INSTANCE.getRegistryName());
         GameRegistry.registerTileEntity(TileWarper.class,           BlockWarper.INSTANCE.getRegistryName());
+        //GameRegistry.registerTileEntity(TileWarper.class,           BlockWarper.INSTANCE.getRegistryName());
         GameRegistry.registerTileEntity(TileEnderCharger.class,     BlockEnderCharger.INSTANCE.getRegistryName());
     }
 
@@ -67,6 +72,7 @@ public class QuirkyEventHandler{
             // ITEM BLOCKS
             BlockWarpController.ITEM,
             BlockWarper.ITEM,
+            BlockWarpPlate.ITEM,
             BlockEnderCharger.ITEM
         );
         for(ItemGeneric i : genericItems){
@@ -79,6 +85,7 @@ public class QuirkyEventHandler{
 	public static void registerRenders(ModelRegistryEvent event) {
 		registerRender(BlockWarpController.ITEM);
         registerRender(BlockWarper.ITEM);
+        registerRender(BlockWarpPlate.ITEM);
         registerRender(BlockEnderCharger.ITEM);
         for(Item i : genericItems){
             registerRender(i);
